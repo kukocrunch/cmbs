@@ -1,0 +1,22 @@
+<section id="accountRegister">
+	<div class="container">
+		<h1>Account Registration</h1>
+		<div class="">
+			<form accept="utf-8" method="POST" id="accountForm" action="/cmbsregistration/register">
+				<div class="form-group">
+					<input type="text" class="form-control" name="account_number" id="accountNumber" placeholder="Account Number" required/>
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" name="mobile_number" id="mobileNumber" placeholder="Mobile Number" required/>
+				</div>
+				<div class="form-group">
+					<input type="email" class="form-control" name="email_address" id="emailAddress" placeholder="Email Address" required/>
+				</div>
+				<div class="form-group">
+					<input type="hidden" class="form-control" name="nonce" value="<?php echo $nonce; ?>">
+				</div>
+				<input type="submit" name="register" class="btn btn-primary form-control" value="Register Account" />
+			</form>
+		</div>
+	</div>
+</section>

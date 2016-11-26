@@ -1,0 +1,19 @@
+section{
+  	height: auto;
+}
+h1, h2, h3, h4, h5, h6, p{
+  	margin: 0;
+}
+ul, ol{
+  	margin: 0;
+  	padding: 0;
+}
+ul{
+	list-style-type: none;
+}
+a, a:hover, a:focus{
+	text-decoration: none;
+}
+img{
+    border: 0;
+}

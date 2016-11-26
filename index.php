@@ -31,7 +31,7 @@ if( isset($_GET['class']) && $_GET['class'] !='' ){
 
 			if( isset( $_GET['function'] ) && $_GET['function'] != ""){
 				$function = trim( $_GET['function'] );
-			} 
+			}
 			
 			$vars = array();
 			$uri_size = sizeof($uriArray);

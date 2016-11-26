@@ -4,10 +4,8 @@
 namespace Config;
 
 class Config{
-
-
-	public $http = "http://cmbs.dev:81/";
-	public $https = "https://cmbs.dev:443/";
+	public $http = "http://cws.mybluemix.net/";
+	public $https = "https://cws.mybluemix.net/";
 	public $dir_root = "";
 	public $default = "home"; //default controller class
 	public $url = "";
@@ -30,11 +28,11 @@ class Config{
 	public $chikka = "https://post.chikka.com/smsapi/request?";
 	public $salt = "popcorn";
 	private static $rdbms = "mysql";
-	private static $host = "localhost";
+	private static $host = "us-cdbr-iron-east-04.cleardb.net";
 	private static $port = "3306";
-	private static $database = "cws";
-	public $dbuser = "root";
-	public $dbpassword = "";
+	private static $database = "ad_fa050ab29d9f1cd";
+	public $dbuser = "b269cef52a54a2";
+	public $dbpassword = "2a5a1cfd";
 	public $vex = 0;
 	//ben - api key
 	public static $_client_id = "e8ca76af-5687-4c07-a5bf-d6004571366d";

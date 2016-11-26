@@ -48,6 +48,8 @@ class cmbsRegistration extends base {
 
 				$CmbsAccounts->account_number = $account_number;
 				$CmbsAccounts->mobile_number = $mobile_number;
+				$CmbsAccounts->fname = $fname;
+				$CmbsAccounts->lname = $lname;
 				$CmbsAccounts->email_address = $email_address;
 				$CmbsAccounts->timestamp = strtotime(date("Ymd"));
 				$_id = $CmbsAccountsDAO->save( $CmbsAccounts );
@@ -56,7 +58,6 @@ class cmbsRegistration extends base {
 				Nonce::generate();
 
 				$vars['config'] = $config;
-				$vars['frnt_flg'] = false;
 				$vars['nonce'] = $_SESSION["nonce"];
 				
 				if($_id){

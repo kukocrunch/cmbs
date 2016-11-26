@@ -9,6 +9,10 @@ class CmbsAccounts extends base {
 
     public $mobile_number;
 
+    public $fname;
+
+    public $lname;
+
     public $email_address;
 
     public $timestamp;

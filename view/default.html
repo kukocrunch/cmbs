@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><?=$title?></title>
+	<meta name="description" content="DMCI">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="<?=$config->vendor?>bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="<?=$config->vendor?>font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <!-- Plugin CSS -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.<?=$config->common_js?>1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<header class="header dark-bg">
+
+		</header>      
+		<!--header end-->
+
+		<main id="main-content">
+			<?php require_once($page); ?>
+		</main>
+
+		<footer id="footer">
+			
+		</footer>
+	</div>
+
+	<!-- Theme JavaScript -->
+	<script src="<?=$config->common_js?>jquery-3.1.1.min.js"></script>
+	<script src="<?=$config->common_js?>jquery-ui-1.9.2.js"></script>
+
+	<!-- Bootstrap Core JavaScript -->
+	<script src="<?=$config->vendor?>bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- Bootstrap Validator -->
+	<script src="<?=$config->common_js?>bootstrap-validator-master/js/validator.js"></script>
+
+	<script src="<?=$config->common_js?>main.js"></script>
+</body>
+</html>

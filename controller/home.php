@@ -57,12 +57,26 @@ class home extends base {
 									  		   ->grab( $TransactionLogs );
 
 		$vars["transaction_logs"] = $transaction_logs;
-		
+
 		echo $this->load->view( 'home.transaction-logs', $vars );	
 	}
 
 	public function getTransactionLogs(){
+		session_start();
 
+		if(isset($_POST)){
+			extract($_POST);
+
+			if($nonce == $_SESSION["nonce"]){
+				extract($this->load->model( 'TransactionLogs' ));
+
+				$transaction_logs = $TransactionLogsDAO->select()
+													   ->offset($offset * $limit)
+													   ->limit($limit)
+									  		   		   ->grab( $TransactionLogs );
+
+				echo json_encode($transaction_logs);
+			}
+		}
 	}
-
 }

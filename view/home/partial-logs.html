@@ -1,0 +1,16 @@
+<?php if(isset($transaction_logs) && !empty($transaction_logs)): ?>
+	<?php foreach($transaction_logs as $log): ?>
+		<tr>
+			<td><?php echo $log->id ?></td>
+			<td><?php echo $log->account_number ?></td>
+			<td><?php echo $log->terminal_id ?></td>
+			<td><?php echo $log->amount ?></td>
+			<td><?php echo $log->transaction_type ?></td>
+			<td><?php echo $log->timestamp; ?></td>
+		</tr>
+	<?php endforeach; ?>
+<?php else: ?>
+	<tr>
+		<td colspan="5"><h2 class="text-center">No Results...</h2></td>
+	</tr>
+<?php endif; ?>

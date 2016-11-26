@@ -1,31 +1,58 @@
+<?php 
+$log_count = count($transaction_logs); 
+$per_page = 30;
+$pager_count = ($log_count > $per_page) ? ceil($log_count / $per_page) : 1;
+?>
 <section id="logsArea">
 	<div class="container">
 		<h1>Transaction Logs</h1>
 		<table class="table">
-			<tr>
-				<th>ID</th>
-				<th>ACOUNT NUMBER</th>
-				<th>TERMINAL ID (CARD NUMBER)</th>
-				<th>AMOUNT</th>
-				<th>TRANSACTION TYPE</th>
-				<th>DATE</th>
-			</tr>
-			<?php if(isset($transaction_logs) && !empty($transaction_logs)): ?>
-				<?php foreach($transaction_logs as $log): ?>
-					<tr>
-						<td><?php echo $log["id"] ?></td>
-						<td><?php echo $log["account_number"] ?></td>
-						<td><?php echo $log["terminal_id"] ?></td>
-						<td><?php echo $log["amount"] ?></td>
-						<td><?php echo $log["transaction_type"] ?></td>
-						<td><?php echo date("Y-md-d H:i:s", $log["timestamp"]); ?></td>
-					</tr>
-				<?php endforeach; ?>
-			<?php else: ?>
+			<thead>
 				<tr>
-					<td colspan="5"><h2 class="text-center">No Results...</h2></td>
+					<th>ID</th>
+					<th>ACOUNT NUMBER</th>
+					<th>TERMINAL ID (CARD NUMBER)</th>
+					<th>AMOUNT</th>
+					<th>TRANSACTION TYPE</th>
+					<th>DATE</th>
 				</tr>
-			<?php endif; ?>
+			</thead>
+			<tbody id="logContents">
+				<?php if(isset($transaction_logs) && !empty($transaction_logs)): ?>
+					<?php for($i = 0; $i < $per_page; $i++): ?>
+						<tr>
+							<td><?php echo $transaction_logs[$i]->id ?></td>
+							<td><?php echo $transaction_logs[$i]->account_number ?></td>
+							<td><?php echo $transaction_logs[$i]->terminal_id ?></td>
+							<td><?php echo $transaction_logs[$i]->amount ?></td>
+							<td><?php echo $transaction_logs[$i]->transaction_type ?></td>
+							<td><?php echo $transaction_logs[$i]->timestamp; ?></td>
+						</tr>
+					<?php endfor; ?>
+				<?php else: ?>
+					<tr>
+						<td colspan="5"><h2 class="text-center">No Results...</h2></td>
+					</tr>
+				<?php endif; ?>
+			</tbody>
 		</table>
+		<?php if($pager_count > 1): ?>
+			<nav aria-label="Logs Navigation">
+				<ul id="logsPager" class="pagination">
+					<li class="disabled">
+						<a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+					</li>
+					<?php for($i = 0; $i < $pager_count; $i++): ?>
+						<li class="<?php echo ($i == 0) ? 'active' : '' ?>">
+							<a href="#" class="page-item" data-offset="<?php echo $i; ?>"><?php echo $i + 1; ?><span class="sr-only">(current)</span></a>
+						</li>
+					<?php endfor; ?>
+					<li>
+						<a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+					</li>
+				</ul>
+			</nav>
+		<?php endif; ?>
 	</div>
+	<input type="hidden" value="<?php echo $nonce; ?>" id="nonce" name="nonce" />
 </section>

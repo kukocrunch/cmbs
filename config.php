@@ -36,6 +36,9 @@ class Config{
 	public $dbuser = "root";
 	public $dbpassword = "";
 	public $vex = 0;
+	//ben - api key
+	public static $_client_id = "e8ca76af-5687-4c07-a5bf-d6004571366d";
+	public static $_client_secret = "oX7xB2jS1eB6kE5mL0nN2cF0hJ4rX7mX4dI1gO0uT3pG1jA3pL";
 
 
 	public function __construct() {

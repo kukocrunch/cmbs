@@ -24,10 +24,12 @@ class Config{
 	public $common_js = "";
 	public $common_assets = "";
 	public $common_fonts = "";
+	public $chikka = "https://post.chikka.com/smsapi/request?";
 	public $chikka_ci = "30c95e4df6c9bf76fef37d6415bcdb243da982ca32c04df4d70190ca8f82abbf";
 	public $chikka_sk = "1c539a8b5a540a6f3d2fbac6ea828fc967d477a6b10747a2bd23d90cc272ae88";
 	public $chikka_sc = "29290396329";
-	public $chikka = "https://post.chikka.com/smsapi/request?";
+	public $ubank_ci = "81420b44-7b5d-4291-8109-0c69a3d989f6";
+	public $ubank_sk = "E6cE0oU3sE2gB4yW3mB6iG6fI2kH8yF8oJ4cS2hB8bE8eR1gU1";
 	public $salt = "popcorn";
 	private static $rdbms = "mysql";
 	private static $host = "localhost";
@@ -60,8 +62,7 @@ class Config{
 		$pdo = "";
 
 		$pdo .=self::$rdbms.":";
-		$pdo .="host=".self::$host.";";
-		$pdo .=" port=".self::$host.";";
+		$pdo .=" host=".self::$host.";";
 		$pdo .=" dbname=".self::$database."";
 		//echo $pdo;
 		return $pdo;

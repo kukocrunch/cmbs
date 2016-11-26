@@ -38,7 +38,7 @@ class api extends base {
         if($method !== 'GET'){
             header("Content-type: application/json");
             $jsonResp['code'] = 405;
-            $jsonResp['message'] = "Method not Allowed";
+            $jsonResp['message'] = "METHOD NOT ALLOWED";
         } else{
             //check in if account exists
             $accountNo = $vars[0];
@@ -61,6 +61,104 @@ class api extends base {
 
         }
     }
+
+
+    public function regist( $vars ){
+        filter_input(INPUT_SERVER, 'REQUEST_METHOD');
+        $method = $_SERVER['REQUEST_METHOD'];
+        $jsonResp = array();
+        header("Content-Type: application/json");
+        if($method != "POST"){
+            $jsonResp['code'] = 405;
+            $jsonResp['message'] = "METHOD NOT ALLOWED";
+            print_r(json_encode($jsonResp));
+            return false;
+        } else{
+            $fname = $_POST['fname'];
+            $lname = $_POST['lname'];
+            $email = $_POST['email'];
+            $mobileNo = $_POST['mobileno'];
+            extract($this->load->model('account'));
+            $tempaccount = [
+                "100509108930",
+                "100063019269"
+            ];
+            $account->fname = $fname;
+            $account->lname = $lname;
+            $account->email_address = $email;
+            $account->mobile_number = $mobileNo;
+            $regist = $accountDAO->save($account);
+            // print_r($regist);
+            if( !is_numeric($regist) && !is_bool($regist) ){
+                $jsonResp['code'] = "400";
+                $jsonResp['message'] = "BAD REQUEST";
+                print_r(json_encode($jsonResp));
+                return false;
+            }
+
+            $jsonResp['code'] = "200";
+            $jsonResp['message'] = "ACCEPTED";
+            print_r(json_encode($jsonResp));
+            return true;
+        }
+
+    }
+
+    public function remit( $vars ){
+        filter_input(INPUT_SERVER, 'REQUEST_METHOD');
+        $method = $_SERVER['REQUEST_METHOD'];
+        $jsonResp = array();
+        header("Content-Type: application/json");
+        if($method != "POST"){
+            $jsonResp['code'] = 405;
+            $jsonResp['message'] = "METHOD NOT ALLOWED";
+            print_r(json_encode($jsonResp));
+            return false;
+        } else{
+            $accountNo = $_POST['account_number'];
+            $destNo = $_POST['destination_number'];
+            $amount = $_POST['amount'];
+            $curl = curl_init();
+            $params = [
+                "channel_id" => "BLUEMIX",
+                "transaction_id" => rand(1000000000,9999999999),
+                "source_account" => $accountNo,
+                "source_currency" => "PHP",
+                "target_account" => $destNo,
+                "target_currency" => "PHP",
+                "amount" => $amount
+            ];
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://api.us.apiconnect.ibmcloud.com/ubpapi-dev/sb/api/RESTs/transfer",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => json_encode($params),
+              CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                "content-type: application/json",
+                "x-ibm-client-id: REPLACE_THIS_KEY",
+                "x-ibm-client-secret: REPLACE_THIS_KEY"
+              ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              echo $response;
+            }
+        }
+                        
+    }
+
 
     public function send( $vars ){
         // api/send/otp/$mobilenumber

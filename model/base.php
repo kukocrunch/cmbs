@@ -216,17 +216,18 @@ abstract class baseDAO{
 		$stmt = "INSERT INTO ".$model->table."(".implode(",",$this->fields).") VALUES(".implode(",",$val).")";
 		//var_dump($this->fields);
 		$query = $this->dbh->prepare($stmt);
+
 		$a = $query->execute($this->values);
 		if($a){
 			$this->flush();
-			if( $getlast = true ){
+			if( $getlast == true ){
 				return $this->dbh->lastInsertId();
 			} else{
 				return true;
 			}
 		} else{
 			$this->flush();
-			 var_dump($query->errorInfo());
+			 return $query->errorInfo()[2];
 		}
 	}
 
@@ -313,6 +314,7 @@ abstract class baseDAO{
 		if (!$query->execute($values)) {
 		    echo "\nPDO::errorInfo():\n";
 		    print_r($this->dbh->errorInfo());
+		    return false;
 		} else{
 			return true;
 		}

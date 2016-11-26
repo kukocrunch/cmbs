@@ -1,0 +1,16 @@
+<center>
+	<p>Scan this QR Code using the Mobile Bank Application</p>
+	<form action="otp/verify" method="POST">
+		<p><label for="otp">Input OTP</label></p>
+		<p><input type="number" id="otp"></p>
+		<p><input type="submit" id="sub_otp" class="btn btn-primary" value="Submit OTP">
+	</form>
+</center>
+<script>
+setTimeout( function(){ 
+    // Do something after 3 minutes 
+    alert('Session Timed out, Please Try Again');
+    window.location.href = "<?=$config->http;?>";
+  }  , 180000 );
+//180000
+</script>

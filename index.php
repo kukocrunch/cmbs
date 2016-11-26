@@ -38,16 +38,10 @@ if( isset($_GET['class']) && $_GET['class'] !='' ){
 
 			foreach($uriArray as $k => $v){
 				foreach($_GET as $key => $var){
-					if($key == 'class' && $v != $var){
+					if($v != $var){
 						$vars[] = $v;
 					}
 				}
-			}
-			if(isset($vars[0]) && $vars[0] == "f"){
-				$function = trim($vars[1]);
-				unset($vars[0]);
-				unset($vars[1]);
-				$vars = array_values($vars);
 			}
 			try{
 				if(is_callable(array("Controller\\".trim($_GET['class']),$function))) { 

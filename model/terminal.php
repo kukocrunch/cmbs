@@ -41,6 +41,7 @@ class TerminalDAO extends baseDAO{
     }
 
     public function checkOtp($terminalId, $otp){
+        $this->table = "otp";
         return $this->select()
                   ->where('terminal_id', $terminalId)
                   ->where('otp', $otp)

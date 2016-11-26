@@ -218,10 +218,17 @@ class api extends base {
 
         print_r($response);
         print_r($err);
-        if($response){
-            
-        }
+         if($response){
+            $otp = $TerminalDAO->checkOtp($vars["terminalNo"], $randpin);
+            if(empty($otp)){
+                extract( $this->load->model( 'Terminal' ));
 
+                $Terminal->terminal_id = $vars["terminalNo"];
+                $Terminal->otp = $randpin;
+
+                $terminal_id = $TerminalDAO->storeOtp( $Terminal );
+            }
+        }
     }
 
 }

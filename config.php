@@ -6,8 +6,8 @@ namespace Config;
 class Config{
 
 
-	public $http = "http://uhaccmbs/";
-	public $https = "https://uhaccmbs/";
+	public $http = "http://cmbs.dev:81/";
+	public $https = "https://cmbs.dev:443/";
 	public $dir_root = "";
 	public $default = "home"; //default controller class
 	public $url = "";
@@ -24,11 +24,15 @@ class Config{
 	public $common_js = "";
 	public $common_assets = "";
 	public $common_fonts = "";
+	public $chikka_ci = "30c95e4df6c9bf76fef37d6415bcdb243da982ca32c04df4d70190ca8f82abbf";
+	public $chikka_sk = "1c539a8b5a540a6f3d2fbac6ea828fc967d477a6b10747a2bd23d90cc272ae88";
+	public $chikka_sc = "29290396329";
+	public $chikka = "https://post.chikka.com/smsapi/request?";
 	public $salt = "popcorn";
 	private static $rdbms = "mysql";
 	private static $host = "localhost";
 	private static $port = "3306";
-	private static $database = "uhaccmbs";
+	private static $database = "cws";
 	public $dbuser = "root";
 	public $dbpassword = "";
 	public $vex = 0;
@@ -56,7 +60,8 @@ class Config{
 		$pdo = "";
 
 		$pdo .=self::$rdbms.":";
-		$pdo .=" host=".self::$host.";";
+		$pdo .="host=".self::$host.";";
+		$pdo .=" port=".self::$host.";";
 		$pdo .=" dbname=".self::$database."";
 		//echo $pdo;
 		return $pdo;

@@ -22,13 +22,13 @@ class api extends base {
     }
 
 
-    public function index( $vars ){
+    // public function index( $vars ){
 
-        $vars["mobile_number"] = "639178826159";
-        $vars["otp"] = "success";
-        $this->send($vars);
+    //     $vars["mobile_number"] = "639178826159";
+    //     $vars["otp"] = "success";
+    //     $this->send($vars);
 
-    }
+    // }
     public function check( $vars ){
 
         // api/check/$accountid/$accountnumber/encrypted($terminal)
@@ -42,7 +42,7 @@ class api extends base {
         } else{
             //check in if account exists
             $accountNo = $vars[0];
-            $accountNo = $vars[1];
+            $mobileNo = $vars[1];
             $terminalNo = $vars[2];
             header('Content-type: application/json');
             extract($this->load->model('account'));
@@ -67,20 +67,16 @@ class api extends base {
         // api/check/$accountid/$accountnumber/encrypted($terminal)/
         $otp = $vars['otp'];
         $config = new Config();
-        $nonce = new Nonce();
-        $url = "https://post.chikka.com/smsapi/request?";
+        Nonce::generate();
+        $url = $config->chikka;
         $randpin = 0;
         $params = [
             "message_type" => "SEND",
             "mobile_number" => $vars['mobile_number'],
-            "shortcode" => "29290396329",
-            // "shortcode" => $config->shortcode,
-            // "message_id" => $nonce->generate,
-            "message_id" => rand(1000000,9999999),
-            "client_id" => "30c95e4df6c9bf76fef37d6415bcdb243da982ca32c04df4d70190ca8f82abbf",
-            // "client_id" => $config->chikka_ci,
-            "secret_key" => "1c539a8b5a540a6f3d2fbac6ea828fc967d477a6b10747a2bd23d90cc272ae88"
-            // "secret_key" => $config->chikka_sk
+            "shortcode" => $config->chikka_sc,
+            "message_id" => rand(1000000000,9999999999),
+            "client_id" => $config->chikka_ci,
+            "secret_key" => $config->chikka_sk
         ];
         switch($otp){
             case "success":

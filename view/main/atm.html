@@ -1,3 +1,5 @@
+<body style="background-color:#676db7; color:#FFF;">
+<div style="width:980px; margin:0 auto; padding: 50px; border:2px dashed #FFF;"> 
 <center>
 	<p>Scan this QR Code using the Mobile Bank Application</p>
 	<form action="otp/verify" method="POST">
@@ -5,7 +7,17 @@
 		<p><input type="number" id="otp"></p>
 		<p><input type="submit" id="sub_otp" class="btn btn-primary" value="Submit OTP">
 	</form>
+
+	<div>
+		<ul style="list-style-type: none;">
+			<li><a href="<?=$config->http?>main/atm_qr" class="btn btn-warning">Cardless Transaction</a></li>
+			<li style="text-align:right;"><a href="#" class="btn btn-warning">Other Services</a></li>
+			<li style="text-align:right;"><a href="<?=$config->http?>" class="btn btn-warning">Exit</a></li>
+		</ul>
+		</div>
+	</div>
 </center>
+</body>
 <script>
 setTimeout( function(){ 
     // Do something after 3 minutes 

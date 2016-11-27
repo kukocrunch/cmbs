@@ -23,9 +23,9 @@ class Config{
 	public $common_assets = "";
 	public $common_fonts = "";
 	public $chikka = "https://post.chikka.com/smsapi/request?";
-	public $chikka_ci = "30c95e4df6c9bf76fef37d6415bcdb243da982ca32c04df4d70190ca8f82abbf";
-	public $chikka_sk = "1c539a8b5a540a6f3d2fbac6ea828fc967d477a6b10747a2bd23d90cc272ae88";
-	public $chikka_sc = "29290396329";
+	public $chikka_ci = "5460bb2e9a263b5b7d0e908bc49772f6cfa6ba0b32e9f010a03b8e9db7211a76";
+	public $chikka_sk = "a2cb2102075564aba2469dbca8b2d5ee8d2eb3ee8e7ef2457774a3b4c70a0fa7";
+	public $chikka_sc = "292909993";
 	public $ubank_ci = "81420b44-7b5d-4291-8109-0c69a3d989f6";
 	public $ubank_sk = "E6cE0oU3sE2gB4yW3mB6iG6fI2kH8yF8oJ4cS2hB8bE8eR1gU1";
 	public $salt = "popcorn";

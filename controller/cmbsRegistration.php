@@ -12,7 +12,7 @@ use Includes\Common\NonceGenerator as Nonce;
 use Includes\Crypt\Salt as Salter;
 use Config\Config;
 use Model;
-class cmbsRegistration extends base {
+class cmbsregistration extends base {
 	
 	private $session;
 	public function __construct(){

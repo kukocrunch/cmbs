@@ -93,7 +93,7 @@ class api extends base {
             ];
             //chose the one with no balance for account
             foreach($tempaccount as $tmp){
-                $balance = $this->getAccount($tmp)['available_balance'];
+                $balance = $accountDAO->getAccount($tmp)['available_balance'];
                 if($balance <= 0){
                     $account->account_number = $tmp;
                 }
@@ -118,7 +118,12 @@ class api extends base {
         }
 
     }
-
+    /*
+    * /api/f/remit
+    * @string account_number
+    * @string destination_number (mobile)
+    * @string amount
+    */
     public function remit( $vars ){
         filter_input(INPUT_SERVER, 'REQUEST_METHOD');
         $method = $_SERVER['REQUEST_METHOD'];
@@ -136,14 +141,14 @@ class api extends base {
             $destNo = $_POST['destination_number'];
             $amount = $_POST['amount'];
             extract($this->load->model('account'));
-            $destAccNo = $accountDAO->getAccountByMobile($destNo)['account_number'];
+            $destAccNo = $accountDAO->getAccountByMobile($destNo)->account_number;
             $curl = curl_init();
             $params = [
                 "channel_id" => "BLUEMIX",
                 "transaction_id" => rand(1000000000,9999999999),
                 "source_account" => $accountNo,
                 "source_currency" => "PHP",
-                "target_account" => $destNo,
+                "target_account" => $destAccNo,
                 "target_currency" => "PHP",
                 "amount" => $amount
             ];
@@ -172,11 +177,12 @@ class api extends base {
             if ($err) {
               echo "cURL Error #:" . $err;
             } else {
-                $jsonResp['message'] = "You have sent ".$vars['amount']." to Mobile No# ".$destNo;
+                $jsonResp['message'] = "You have sent ".$amount." to Mobile No# ".$destNo;
                 $vars['amount'] = $amount;
                 $vars['account_number'] = $accountNo;
-                $vars['destination_number'] = $destNo;
+                $vars['mobile_number'] = $destNo;
                 $vars['type'] = "remitReceiveNotif";
+                $vars['destination_number'] = $destAccNo;
                 $this->send($vars);
             }
         }
@@ -285,6 +291,36 @@ class api extends base {
         $config = new Config();
         curl_setopt_array($curl, array(
           CURLOPT_URL => "https://api.us.apiconnect.ibmcloud.com/ubpapi-dev/sb/api/RESTs/getAccount?account_no=".$account_no,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "GET",
+          CURLOPT_HTTPHEADER => array(
+            "accept: application/json",
+            "content-type: application/json",
+            "x-ibm-client-id: ".$config->ubank_ci,
+            "x-ibm-client-secret: ".$config->ubank_sk
+          ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+          echo "cURL Error #:" . $err;
+        } else {
+          echo $response;
+        }
+    }
+        public function getAccountStatic( $vars ){
+        $curl = curl_init();
+        $config = new Config();
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => "https://api.us.apiconnect.ibmcloud.com/ubpapi-dev/sb/api/RESTs/getAccount?account_no=".$vars[0],
           CURLOPT_RETURNTRANSFER => true,
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,

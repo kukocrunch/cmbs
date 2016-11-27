@@ -1,13 +1,17 @@
 <?php
 // User Model
 namespace Model;
-class Terminal extends base {
+class Otp extends base {
     
     public $id;
 
     public $terminal_id;
+    public $otp;
+    public $account_number;
+    public $mobile_number;
+    public $amount;
 
-    public $table = "atm_information";
+    public $table = "otp";
 
     public function __construct(){
         parent::__construct();
@@ -16,15 +20,16 @@ class Terminal extends base {
 
 }
 
-class TerminalDAO extends baseDAO{
+class OtpDAO extends baseDAO{
 
     //add addtional query functions here
     //add business logic here
 
-    public function getTerminal($terminalId){
+    public function checkOtp($terminalId, $otp){
         return $this->select()
                   ->where('terminal_id',$terminalId)
-                  ->grab(new Terminal);
+                  ->where('otp',$otp)
+                  ->grab(new Otp);
     }
 
 }

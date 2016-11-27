@@ -16,7 +16,7 @@ class Account extends base {
     public $mobile_number = "";
 
     public $email_address = "";
-    
+
     public function __construct(){
         parent::__construct();
     }
@@ -31,10 +31,16 @@ class AccountDAO extends baseDAO{
 
     public function getAccount( $account, $mobile ){
         return $this->select()
-                   ->where('account_number', $account)
-                   ->where('mobile_number', $mobile)
-                   ->grab(new Account);
+                 ->where('account_number', $account)
+                 ->where('mobile_number', $mobile)
+                 ->grab(new Account);
 
+    }
+
+    public function getAccountByMobile( $mobile ){
+        return $this->select('account_number')
+                 ->where('mobile_number',$mobile)
+                 ->grab(new Account);
     }
 
 }

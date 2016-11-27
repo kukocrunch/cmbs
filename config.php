@@ -29,12 +29,19 @@ class Config{
 	public $ubank_ci = "81420b44-7b5d-4291-8109-0c69a3d989f6";
 	public $ubank_sk = "E6cE0oU3sE2gB4yW3mB6iG6fI2kH8yF8oJ4cS2hB8bE8eR1gU1";
 	public $salt = "popcorn";
+	public $w_min = "500";
+	public $w_max = "10000";
 	private static $rdbms = "mysql";
 	private static $host = "us-cdbr-iron-east-04.cleardb.net";
 	private static $port = "3306";
 	private static $database = "ad_fa050ab29d9f1cd";
 	public $dbuser = "b269cef52a54a2";
 	public $dbpassword = "2a5a1cfd";
+	// private static $host = "localhost";
+	// private static $port = "3306";
+	// private static $database = "cws";
+	// public $dbuser = "root";
+	// public $dbpassword = "";
 	public $vex = 0;
 	//ben - api key
 	public static $_client_id = "e8ca76af-5687-4c07-a5bf-d6004571366d";

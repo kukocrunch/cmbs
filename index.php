@@ -43,6 +43,12 @@ if( isset($_GET['class']) && $_GET['class'] !='' ){
 					}
 				}
 			}
+			if(isset($vars[0]) && $vars[0] == "f"){
+				$function = trim($vars[1]);
+				unset($vars[0]);
+				unset($vars[1]);
+				$vars = array_values($vars);
+			}
 			try{
 				if(is_callable(array("Controller\\".trim($_GET['class']),$function))) { 
 					call_user_func_array(array($controller,$function),array($vars));

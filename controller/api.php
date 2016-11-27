@@ -22,28 +22,29 @@ class api extends base {
     }
 
 
-    // public function index( $vars ){
-
-    //     $vars["mobile_number"] = "639178826159";
-    //     $vars["otp"] = "success";
-    //     $this->send($vars);
-
-    // }
+    /*
+    * /api/f/check
+    * @string $accountNo
+    * @string $mobileNo
+    * @string $terminalNo
+    * @string $amount
+    */
     public function check( $vars ){
 
         // api/check/$accountid/$accountnumber/encrypted($terminal)
         filter_input(INPUT_SERVER, 'REQUEST_METHOD');
         $method = $_SERVER['REQUEST_METHOD'];
         $jsonResp = array();
-        if($method !== 'GET'){
+        if($method !== 'POST'){
             header("Content-type: application/json");
             $jsonResp['code'] = 405;
             $jsonResp['message'] = "METHOD NOT ALLOWED";
         } else{
             //check in if account exists
-            $accountNo = $vars[0];
-            $mobileNo = $vars[1];
-            $terminalNo = $vars[2];
+            $accountNo = $_POST['account_number'];
+            $mobileNo = $_POST['mobile_number'];
+            $terminalNo = $_POST['terminal_no'];
+            $amount = $_POST['amount'];
             header('Content-type: application/json');
             extract($this->load->model('account'));
             extract($this->load->model('terminal'));
@@ -52,17 +53,24 @@ class api extends base {
             if(!empty($account) && !empty($terminal)){
                 $vars['type'] = "success";
                 $vars['mobile_number'] = $mobileNo;
+                $vars['account_number'] = $accountNo;
                 $vars['terminalNo'] = $terminalNo;
+                $vars['amount'] = $amount;
                 $this->send($vars);
             } else{
-                $vars['otp'] = "fail";
+                $vars['type'] = "fail";
                 $this->send($vars);
             }
 
         }
     }
 
-
+    /**
+    * /api/f/regist
+    * @string fname
+    * @string lname
+    * @string email
+    */
     public function regist( $vars ){
         filter_input(INPUT_SERVER, 'REQUEST_METHOD');
         $method = $_SERVER['REQUEST_METHOD'];
@@ -83,6 +91,13 @@ class api extends base {
                 "100509108930",
                 "100063019269"
             ];
+            //chose the one with no balance for account
+            foreach($tempaccount as $tmp){
+                $balance = $this->getAccount($tmp)['available_balance'];
+                if($balance <= 0){
+                    $account->account_number = $tmp;
+                }
+            }
             $account->fname = $fname;
             $account->lname = $lname;
             $account->email_address = $email;
@@ -108,8 +123,10 @@ class api extends base {
         filter_input(INPUT_SERVER, 'REQUEST_METHOD');
         $method = $_SERVER['REQUEST_METHOD'];
         $jsonResp = array();
-        header("Content-Type: application/json");
+        $config = new Config();
+        
         if($method != "POST"){
+            header("Content-Type: application/json");
             $jsonResp['code'] = 405;
             $jsonResp['message'] = "METHOD NOT ALLOWED";
             print_r(json_encode($jsonResp));
@@ -118,6 +135,8 @@ class api extends base {
             $accountNo = $_POST['account_number'];
             $destNo = $_POST['destination_number'];
             $amount = $_POST['amount'];
+            extract($this->load->model('account'));
+            $destAccNo = $accountDAO->getAccountByMobile($destNo)['account_number'];
             $curl = curl_init();
             $params = [
                 "channel_id" => "BLUEMIX",
@@ -140,8 +159,8 @@ class api extends base {
               CURLOPT_HTTPHEADER => array(
                 "accept: application/json",
                 "content-type: application/json",
-                "x-ibm-client-id: REPLACE_THIS_KEY",
-                "x-ibm-client-secret: REPLACE_THIS_KEY"
+                "x-ibm-client-id: ".$config->ubank_ci,
+                "x-ibm-client-secret: ".$config->ubank_sk
               ),
             ));
 
@@ -153,16 +172,39 @@ class api extends base {
             if ($err) {
               echo "cURL Error #:" . $err;
             } else {
-              echo $response;
+                $jsonResp['message'] = "You have sent ".$vars['amount']." to Mobile No# ".$destNo;
+                $vars['amount'] = $amount;
+                $vars['account_number'] = $accountNo;
+                $vars['destination_number'] = $destNo;
+                $vars['type'] = "remitReceiveNotif";
+                $this->send($vars);
             }
         }
                         
     }
 
 
+    public function checkAmount( $vars ){
+        $amount = $vars['amount'];
+        $config = new Config();
+        header("Content-Type: application/json");
+        if($amount < $config->w_min){
+            $jsonResp['message'] = "Withdraw amount must be greater than ".$config->w_min;
+            print_r(json_encode($jsonResp));
+            return false;
+        } else if($amount > $config->w_max){
+            $jsonResp['message'] = "Withdraw amount must be less than ".$config->w_max;
+            print_r(json_encode($jsonResp));
+            return false;
+        } else{
+            return true;
+        }
+    }
+
     public function send( $vars ){
         // api/send/otp/$mobilenumber
         // api/check/$accountid/$accountnumber/encrypted($terminal)/
+
         $type = $vars['type'];
         $config = new Config();
         Nonce::generate();
@@ -170,15 +212,29 @@ class api extends base {
         $otp = 0;
         $params = [
             "message_type" => "SEND",
-            "mobile_number" => $vars['mobile_number'],
+            "mobile_number" => "63".ltrim($vars['mobile_number'],"0"),
             "shortcode" => $config->chikka_sc,
             "message_id" => rand(1000000000,9999999999),
             "client_id" => $config->chikka_ci,
             "secret_key" => $config->chikka_sk
         ];
+
         switch($type){
             case "success":
+                if(!$this->checkAmount($vars)){
+                    return false;
+                }
                 $randpin = rand(100000,999999);
+                extract( $this->load->model( 'otp' ));
+                $otp_exist = $otpDAO->checkOtp($vars["terminalNo"], $randpin);
+                if(empty($otp_exist)){
+                    $otp->terminal_id = $vars["terminalNo"];
+                    $otp->account_number = $vars["account_number"];
+                    $otp->mobile_number = $vars["mobile_number"];
+                    $otp->amount = $vars["amount"];
+                    $otp->otp = $randpin;
+                    $otpDAO->save( $otp );
+                }
                 $params['message'] = "Thank you for choosing CMBS. Your one time use pin is: ".$randpin;
                 break;
             case "fail":
@@ -186,6 +242,10 @@ class api extends base {
                 break;
             case "notif":
                 $params['message'] = "Your transaction has been complete.";
+                $params['message'] .= "Withdraw amount: ".$vars['amount'];
+                break;
+            case "remitReceiveNotif":
+                $params['message'] = "You have received ".$vars['amount'];
                 break;
             default:
                 print_r(json_encode(array("code"=>"400","message"=>"Bad Request")));
@@ -218,16 +278,36 @@ class api extends base {
 
         print_r($response);
         print_r($err);
-         if($response){
-            $otp = $TerminalDAO->checkOtp($vars["terminalNo"], $randpin);
-            if(empty($otp)){
-                extract( $this->load->model( 'Terminal' ));
+    }
 
-                $Terminal->terminal_id = $vars["terminalNo"];
-                $Terminal->otp = $randpin;
+    public function getAccount( $account_no ){
+        $curl = curl_init();
+        $config = new Config();
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => "https://api.us.apiconnect.ibmcloud.com/ubpapi-dev/sb/api/RESTs/getAccount?account_no=".$account_no,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "GET",
+          CURLOPT_HTTPHEADER => array(
+            "accept: application/json",
+            "content-type: application/json",
+            "x-ibm-client-id: ".$config->ubank_ci,
+            "x-ibm-client-secret: ".$config->ubank_sk
+          ),
+        ));
 
-                $terminal_id = $TerminalDAO->storeOtp( $Terminal );
-            }
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+          echo "cURL Error #:" . $err;
+        } else {
+          echo $response;
         }
     }
 

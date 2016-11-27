@@ -32,7 +32,7 @@ class generator extends base {
 		$info['TERMINAL_ID'] = $term_id[0]["id"];
 		$info['TERMINAL_NAME'] = $term_id[0]["name"];
 		$info['TERMINAL_ADD'] = $term_id[0]["address"];
-		$info['ATM_TM'] = date('Y-m-d');
+		$info['ATM_TM'] = date('Y-m-d H:i:s');
 		$json = json_encode($info);
 		$vars['qrcode'] = Qrcode::png($json);
 	}

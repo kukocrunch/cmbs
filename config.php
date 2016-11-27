@@ -4,10 +4,10 @@
 namespace Config;
 
 class Config{
-	public $http = "http://cmbs.dev:81/";
-	public $https = "https://cmbs.dev:443/";
+	public $http = "http://cws.mybluemix.net/";
+	public $https = "https://cws.mybluemix.net/";
 	public $dir_root = "";
-	public $default = "home"; //default controller class
+	public $default = "atm"; //default controller class
 	public $url = "";
 	public $controller = "";
 	public $view = "";
@@ -32,16 +32,16 @@ class Config{
 	public $w_min = "500";
 	public $w_max = "10000";
 	private static $rdbms = "mysql";
-	// private static $host = "us-cdbr-iron-east-04.cleardb.net";
-	// private static $port = "3306";
-	// private static $database = "ad_fa050ab29d9f1cd";
-	// public $dbuser = "b269cef52a54a2";
-	// public $dbpassword = "2a5a1cfd";
-	private static $host = "localhost";
+	private static $host = "us-cdbr-iron-east-04.cleardb.net";
 	private static $port = "3306";
-	private static $database = "cws";
-	public $dbuser = "root";
-	public $dbpassword = "";
+	private static $database = "ad_fa050ab29d9f1cd";
+	public $dbuser = "b269cef52a54a2";
+	public $dbpassword = "2a5a1cfd";
+	// private static $host = "localhost";
+	// private static $port = "3306";
+	// private static $database = "cws";
+	// public $dbuser = "root";
+	// public $dbpassword = "";
 	public $vex = 0;
 	//ben - api key
 	public static $_client_id = "e8ca76af-5687-4c07-a5bf-d6004571366d";
